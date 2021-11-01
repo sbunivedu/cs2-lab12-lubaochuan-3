@@ -1,0 +1,39 @@
+@startuml
+'http://www.plantuml.com/plantuml
+
+LinkedBinaryTree <|-- LinkedBinarySearchTree
+
+class LinkedBinaryTree {
+  -BinaryTreeNode<T> root
+  +LinkedBinaryTree(T element)
+  +LinkedBinaryTree(T element, LinkedBinaryTree<T> left, LinkedBinaryTree<T> right)
+  +T getRootElement()
+  +boolean isEmpty()
+  +int size()
+  +boolean contains(T targetElement)
+  +T find(T targetElement)
+  +String toString()
+  +String inOrder()
+  +String preOrder()
+  +String postOrder()
+  +String levelOrder()
+  +int getHeight()
+  -int height(BinaryTreeNode<T> node)
+  -BinaryTreeNode<T> findNode(T targetElement, BinaryTreeNode<T> next)
+}
+
+class LinkedBinarySearchTree {
+  +addElement(T element)
+  +T removeElement(T targetElement)
+  +addElement(T element, BinaryTreeNode<T> node)
+  -BinaryTreeNode<T> addElementAVL(T element, BinaryTreeNode<T> node)
+  -BinaryTreeNode<T> singleRightRotation(BinaryTreeNode<T> oldRoot)
+  -BinaryTreeNode<T> singleLeftRotation(BinaryTreeNode<T> oldRoot)
+  -BinaryTreeNode<T> doubleLeftRightRotation(BinaryTreeNode<T> oldRoot)
+  -BinaryTreeNode<T> doubleRightLeftRotation(BinaryTreeNode<T> oldRoot)
+}
+
+class BinaryTreeNode {
+  #int height
+}
+@enduml
