@@ -37,11 +37,11 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
       throw new NonComparableElementException("LinkedBinarySearchTree");
     }
 
-    if (isEmpty()){
-      root = new BinaryTreeNode<T>(element);
-    }else{
-      addElementAVL(element, root);
-    }
+    //if (isEmpty()){
+    //  root = new BinaryTreeNode<T>(element);
+    //}else{
+    root = addElementAVL(element, root);
+    //}
   }
 
   /**
@@ -75,20 +75,19 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
     return height(node.right) - height(node.left);
   }
 
-private BinaryTreeNode<T> addElementAVL(T element, BinaryTreeNode<T> node){
-    BinaryTreeNode<T> newRoot = null;
+  private BinaryTreeNode<T> addElementAVL(T element, BinaryTreeNode<T> node){
     if(node == null){
-	  return new BinaryTreeNode<T>(element);
+	    return new BinaryTreeNode<T>(element);
     }else if(((Comparable)element).compareTo(node.getElement()) < 0){
-	  node.left = addElementAVL(element, node.left);
+	    node.left = addElementAVL(element, node.left);
     }else{
-	  node.right = addElementAVL(element, node.right);
-	}
+	    node.right = addElementAVL(element, node.right);
+	  }
 
-	node = balance(node);
+	  node = balance(node);
 
-	return node;
-}
+	  return node;
+  }
 
 private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
   // node is the parent of subtrees that are changed as the result of add or remove
@@ -96,20 +95,24 @@ private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
   if(bf>1 || bf<-1){
     if(bf==-2 && balanceFactor(node.left)==-1){
       //single right rotation
+      //System.out.println("left rotation");
       node = singleRightRotation(node);
     }else if(bf==-2 && balanceFactor(node.left)==1){
       //left right double rotation
+      //System.out.println("left right rotation");
       node = doubleLeftRightRotation(node);
     }else if(bf==2 && balanceFactor(node.right)==1){
       //single left rotation
+      //System.out.println("left rotation");
       node = singleLeftRotation(node);
-    }else if(bf==2 && balanceFactor(node.left)==-1){
+    }else if(bf==2 && balanceFactor(node.right)==-1){
       //right left double rotation
+      //System.out.println("right left rotation");
       node = doubleRightLeftRotation(node);
     }
   } 
   // update height
-  node.height = Math.max(node.right.height, node.left.height)+1;
+  node.height = Math.max(height(node.right), height(node.left))+1;
   return node;
 }
   /**
@@ -123,8 +126,38 @@ private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
    * @throws ElementNotFoundException if the element is not in the tree
    */
   public T find(T targetElement) throws ElementNotFoundException{
-    // To be completed as a Programming Project
-    return null;
+    BinaryTreeNode<T> current = findNode(targetElement, root);
+
+    if (current == null){
+      throw new ElementNotFoundException("LinkedBinaryTree");
+    }
+    return (current.getElement());
+  }
+
+  /**
+   * Returns a reference to the specified target element if it is
+   * found in this binary tree.
+   *
+   * @param targetElement the element being sought in this tree
+   * @param next the element to begin searching from
+   */
+  private BinaryTreeNode<T> findNode(T targetElement,
+                                     BinaryTreeNode<T> next){
+    if (next == null){
+      return null;
+    }
+
+    if (next.getElement().equals(targetElement)){
+      return next;
+    }
+
+    if(((Comparable)targetElement).compareTo(next.getElement())<=0){
+      // go left
+      return findNode(targetElement, next.getLeft());
+    }else{
+      // go right
+      return findNode(targetElement, next.getRight());
+    }
   }
 
   /**

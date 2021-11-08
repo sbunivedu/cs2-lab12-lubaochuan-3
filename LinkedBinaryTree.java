@@ -87,14 +87,13 @@ public class LinkedBinaryTree<T> implements BinaryTreeADT<T>{
    * @param node the node from which to calculate the height
    * @return the height of the tree
    */
-
   protected int height(BinaryTreeNode<T> node){
     if(node == null){
       return -1;
       //the height of a one node tree is zero,
       //therefore, the height of an empty tree must be -1.
     }else{
-      return 1 + Math.max(height(node.getLeft()), height(node.getRight()));
+      return node.height;
     }
   }
 
