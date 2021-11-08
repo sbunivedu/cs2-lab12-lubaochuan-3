@@ -40,7 +40,7 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
     if (isEmpty()){
       root = new BinaryTreeNode<T>(element);
     }else{
-      addElement(element, root);
+      addElementAVL(element, root);
     }
   }
 
@@ -70,6 +70,49 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
       }
     }
   }
+
+  private int balanceFactor(BinaryTreeNode<T> node){
+    return height(node.right) - height(node.left);
+  }
+
+private BinaryTreeNode<T> addElementAVL(T element, BinaryTreeNode<T> node){
+    BinaryTreeNode<T> newRoot = null;
+    if(node == null){
+	  return new BinaryTreeNode<T>(element);
+    }else if(((Comparable)element).compareTo(node.getElement()) < 0){
+	  node.left = addElementAVL(element, node.left);
+    }else{
+	  node.right = addElementAVL(element, node.right);
+	}
+
+	node = balance(node);
+
+	return node;
+  }
+}
+
+private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
+  // node is the parent of subtrees that are changed as the result of add or remove
+  int bf = balanceFactor(node);
+  if(bf>1 || bf<-1){
+    if(bf==-2 && balanceFactor(node.left)==-1){
+      //single right rotation
+      node = singleRightRotation(node);
+    }else if(bf==-2 && balanceFactor(node.left)==1){
+      //left right double rotation
+      node = doubleLeftRightRotation(node);
+    }else if(bf==2 && balanceFactor(node.right)==1){
+      //single left rotation
+      node = singleLeftRotation(node);
+    }else if(bf==2 && balanceFactor(node.left)==-1){
+      //right left double rotation
+      node = doubleRightLeftRotation(node);
+    }
+  } 
+  // update height
+  node.height = Math.max(node.right.height-node.left.height)+1;
+  Return node;
+}
 
   /**
    * Overrides the implementation in LinkedBinaryTree class.
@@ -246,5 +289,43 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
   public T findMax() throws EmptyCollectionException{
     // To be completed as a Programming Project
     return null;
+  }
+
+  private BinaryTreeNode<T> singleRightRotation(BinaryTreeNode<T> oldRoot){
+    //TASK: Rotate the left child up and to the right to
+    //      become the new root of this subtree
+    BinaryTreeNode<T> newRoot = oldRoot.left;
+    oldRoot.left = newRoot.right;
+    newRoot.right = oldRoot;
+    oldRoot.height = Math.max(height(oldRoot.left), height(oldRoot.right)) + 1;
+    newRoot.height = Math.max(height(newRoot.left), height(newRoot.right)) + 1;
+    return newRoot;
+  }
+
+  private BinaryTreeNode<T> singleLeftRotation(BinaryTreeNode<T> oldRoot){
+    //TASK: Rotate the right child up and to the left to
+    //      become the new root of this subtree
+    BinaryTreeNode<T> newRoot = oldRoot.right;
+    oldRoot.right = newRoot.left;
+    newRoot.left = oldRoot;
+    oldRoot.height = Math.max(height(oldRoot.left), height(oldRoot.right)) + 1;
+    newRoot.height = Math.max(height(newRoot.left), height(newRoot.right)) + 1;
+    return newRoot;
+  }
+
+  private BinaryTreeNode<T> doubleLeftRightRotation(BinaryTreeNode<T> oldRoot){
+    //TASK: Rotate the left subtree to the left, then up
+    //      and to the right to become the new root of this subtree
+    oldRoot.left = singleLeftRotation(oldRoot.left);
+    BinaryTreeNode<T> newRoot = singleRightRotation(oldRoot);
+    return newRoot;
+  }
+
+  private BinaryTreeNode<T> doubleRightLeftRotation(BinaryTreeNode<T> oldRoot){
+    //TASK: Rotate the right subtree to the right, then up and to
+    //      the left to become the new root of this subtree
+    oldRoot.right = singleRightRotation(oldRoot.right);
+    BinaryTreeNode<T> newRoot = singleLeftRotation(oldRoot);
+    return newRoot;
   }
 }
