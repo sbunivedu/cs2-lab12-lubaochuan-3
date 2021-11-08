@@ -252,14 +252,4 @@ public class LinkedBinaryTree<T> implements BinaryTreeADT<T>{
 
     return result;
   }
-
-  protected int height(BinaryTreeNode<T> node){
-    if(node == null){
-      return -1;
-      //the height of a one node tree is zero,
-      //therefore, the height of an empty tree must be -1.
-    }else{
-      return node.height;
-    }
-  }
 }

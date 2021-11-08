@@ -88,7 +88,6 @@ private BinaryTreeNode<T> addElementAVL(T element, BinaryTreeNode<T> node){
 	node = balance(node);
 
 	return node;
-  }
 }
 
 private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
@@ -110,10 +109,9 @@ private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
     }
   } 
   // update height
-  node.height = Math.max(node.right.height-node.left.height)+1;
-  Return node;
+  node.height = Math.max(node.right.height, node.left.height)+1;
+  return node;
 }
-
   /**
    * Overrides the implementation in LinkedBinaryTree class.
    * Returns a reference to the specified target element if it is
