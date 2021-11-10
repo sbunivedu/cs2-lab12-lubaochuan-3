@@ -53,5 +53,45 @@ public class LinkedBinarySearchTreeTester{
     System.out.println("removing \"H\"");
     tree.removeElement("H");
     System.out.println(tree);
+    System.out.println("removing \"A\"");
+    tree.removeElement("A");
+    System.out.println(tree);
+    System.out.println("removing \"C\"");
+    tree.removeElement("C");
+    System.out.println(tree);
+    System.out.println("removing \"J\"");
+    tree.removeElement("J");
+    System.out.println(tree);
+    System.out.println("removing \"J\"");
+    tree.removeElement("J");
+    System.out.println(tree);
+    System.out.println("removing \"E\"");
+    tree.removeElement("E");
+    System.out.println(tree);
+
+    tree = new LinkedBinarySearchTree<String>();
+    tree.addElement("A");
+    tree.addElement("B");
+    tree.addElement("C");
+    tree.addElement("D");
+    tree.addElement("E");
+    tree.addElement("F");
+    tree.addElement("G");
+    tree.addElement("H");
+    tree.addElement("I");
+    tree.addElement("J");
+    System.out.println(tree);
+
+    System.out.println("removing \"H\"");
+    tree.removeElement("H");
+    System.out.println(tree);
+
+    System.out.println("removing \"I\"");
+    tree.removeElement("I");
+    System.out.println(tree);
+
+    System.out.println("removing \"D\"");
+    tree.removeElement("D");
+    System.out.println(tree);
   }
 }

@@ -46,6 +46,10 @@ public class BinaryTreeNode<T>{
     return element;
   }
 
+  public void setElement(T element){
+    this.element = element;
+  }
+
   /**
    * Return the right child of this node.
    *

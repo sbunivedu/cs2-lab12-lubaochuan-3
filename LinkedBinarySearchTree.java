@@ -72,7 +72,9 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
   }
 
   private int balanceFactor(BinaryTreeNode<T> node){
-    return height(node.right) - height(node.left);
+    int result = height(node.right) - height(node.left);
+    System.out.println("BF for node "+node.getElement()+" is "+result);
+    return result;
   }
 
   private BinaryTreeNode<T> addElementAVL(T element, BinaryTreeNode<T> node){
@@ -83,7 +85,8 @@ public class LinkedBinarySearchTree<T> extends LinkedBinaryTree<T>
     }else{
 	    node.right = addElementAVL(element, node.right);
 	  }
-
+    
+    System.out.println("node:"+node);
 	  node = balance(node);
 
 	  return node;
@@ -93,19 +96,19 @@ private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
   // node is the parent of subtrees that are changed as the result of add or remove
   int bf = balanceFactor(node);
   if(bf>1 || bf<-1){
-    if(bf==-2 && balanceFactor(node.left)==-1){
+    if(bf==-2 && balanceFactor(node.left)<=0){
       //single right rotation
       //System.out.println("left rotation");
       node = singleRightRotation(node);
-    }else if(bf==-2 && balanceFactor(node.left)==1){
+    }else if(bf==-2 && balanceFactor(node.left)>0){
       //left right double rotation
       //System.out.println("left right rotation");
       node = doubleLeftRightRotation(node);
-    }else if(bf==2 && balanceFactor(node.right)==1){
+    }else if(bf==2 && balanceFactor(node.right)>=0){
       //single left rotation
       //System.out.println("left rotation");
       node = singleLeftRotation(node);
-    }else if(bf==2 && balanceFactor(node.right)==-1){
+    }else if(bf==2 && balanceFactor(node.right)<0){
       //right left double rotation
       //System.out.println("right left rotation");
       node = doubleRightLeftRotation(node);
@@ -191,15 +194,49 @@ private BinaryTreeNode<T> balance(BinaryTreeNode<T> node){
       throw new ElementNotFoundException("LinkedBinarySearchTree");
     }else{
       if (((Comparable<T>)targetElement).equals(node.element)){
-        node = remove(node);
+        if(node.left == null && node.right == null){// CASE 0: no child
+          node = null; 
+        }else if(node.left == null){                // CASE 1: right child only
+          node = node.right;                        // attach right subtree
+        }else if(node.right == null){               // CASE 2: Left child Only
+          node = node.left;                         // attach left subtree
+        }else{                                      // CASE 3: both L & R children
+          BinaryTreeNode<T> minNode 
+            = replacement(node.right);              // find inorder successor
+          node.setElement(minNode.getElement());    // (smallest in the right subtree)
+          node.right = removeElement(minNode.getElement(), node.right);
+        }                                 
       }else if (((Comparable)targetElement).compareTo(node.element) < 0){
         node.left = removeElement(targetElement, node.left);
       }else{
         node.right = removeElement(targetElement, node.right);
       }
     }
+    System.out.println("node:"+node);
+    if(node != null){
+      node.height = Math.max(height(node.left), height(node.right))+1;
+      System.out.println("height:"+node.height);
+      node = balance(node);
+    }
     return node;
   }
+
+  /**
+     * Returns a reference to the node with the min value in the
+     * specified subtree. 
+     *
+     * @param node the root of the subtree
+     * @return a reference to the replacing node
+     */
+    private BinaryTreeNode<T> replacement(BinaryTreeNode<T> node){
+      BinaryTreeNode<T> current = node;
+ 
+      // loop down to find the leftmost leaf
+      while (current.left != null){
+        current = current.left;
+      }
+      return current;
+    }
 
   /**
    * Remove the node.
